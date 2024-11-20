@@ -26,5 +26,5 @@ def execute_tasks():
             html_content='<p>Sent this email using the sales airflow dag</p>'
         )
         email #execute the email task - email operator is not a callable function
-    sending_email_instance = send_email()
-execute_tasks()    
+    send_email()
+sending_email_instance = execute_tasks()    
