@@ -1,5 +1,6 @@
 from airflow.decorators import dag, task
 from datetime import datetime
+import json
 
 @dag(
     dag_id = "extract_transform_load",
@@ -8,18 +9,29 @@ from datetime import datetime
     schedule_interval = None
 )
 def sales_analysis():
+    '''
+    Sales Data Pipeline using the TaskFlow API with 3 tasks - Extract Load Transform
+    '''
     @task
     def extract():
-        return "Extracted"
+        '''
+        Reading from the hardcoded JSON string
+        '''
+        data_string = '{"Year":"2024", "Month":"November","Day":"Thursday","Hour":"12"}'
+        data = json.loads(data_string)
+        return data
     @task
-    def transform():
-        return "Transformed"
+    def transform(data):
+        if "Year" in data and "Month" in data:
+            print(f"Month: {data['Month']}, Year: {data['Year']}")
+        else:
+            print("Year and month not provided")
     @task
-    def load():
+    def load(transformed_data):
         return "Loaded"
-    extract()
-    transform()
-    load()
+    data = extract()
+    transformed_data = transform(data)
+    loaded_data = load(transformed_data)    
 
 dag_instance = sales_analysis()
 
